@@ -139,10 +139,9 @@ ignore_image:
 
 image:
   description:
-    - Container image used to create containers. If an image is not found or
-      pull is true, the image will be pulled from the registry. Use the registry
-      parameter to control which registry is used.
-  required: true
+    - Repository path and tag used to create the container. If an image is not found or pull is true, the image
+      will be pulled from the registry. If no tag is included, 'latest' will be used.
+  default: null
 
 interactive:
   description:
@@ -159,7 +158,7 @@ ipc_mode:
 keep_volumes:
   description:
     - Retain volumes associated with a removed container.
-  default: false
+  default: true 
 
 kill_signal:
   description:

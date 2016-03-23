@@ -7,7 +7,7 @@ The purpose is to update the existing docker_image module. The updates include e
 match the build, load, pull, push, rmi, and save docker commands and adding support for remote registries.
 
 
-Docker_image will manage a images using docker-py to communicate with either a local or remote API. It will
+Docker_image will manage images using docker-py to communicate with either a local or remote API. It will
 support API versions >= 1.14. The minimum supported version of docker-py has not been decided.
 
 API connection details will be handled externally in a shared utility module.
@@ -28,20 +28,12 @@ archive_path:
 config_path:
   description:
     - Path to a custom docker config file. Docker-py defaults to using ~/.docker/config.json.
-
-cgroup_parent:
-  description:
-    - Optional parent cgroup for build containers.
   default: null
 
-cpu_shares:
+container_limits:
   description:
-    - CPU shares for build containers. Integer value.
-  default: 0
-
-cpuset_cpus:
-  description:
-    - CPUs in which to allow build container execution C(1,3) or C(1-3).
+    - A dictionary of limits applied to each container created by the build process.
+      Valid keys include: memory, memswap, cpushares, cpusetcpus.  
   default: null
 
 dockerfile:
@@ -49,37 +41,28 @@ dockerfile:
     - Name of dockerfile to use when building an image.
   default: Dockerfile
 
-email:
-  description:
-    - The email for the registry account. Provide with username and password when credentials are not encoded
-      in docker configuration file or when encoded credentials should be updated.
-  default: null
-  nolog: true
-
 force:
   description:
-    - Use with absent state to un-tag and remove all images matching the specified name. Use with present state to
-      force a pull or rebuild of the image.
+    - Use with absent state to un-tag and remove all images matching the specified name. Use with states present and tagged
+      to ignore idempotents and take action even when an image already exists. If archive_path is specified, the force option
+      will cause an existing archive to be overwritten. 
   default: false
+
+http_timeout:
+  description:
+    - Timeout for HTTP requests during the image build operation. Provide a positive integer value for the number of
+      seconds.
+  default: null
 
 load_path:
   description:
-    - Use with state present to load a previously save image. Provide the full path to the image archive file.
+    - Use with state present to load a previously saved image. Provide the full path to the image archive file.
   default: null
   
-memory:
-  description:
-    - Build container limit. Memory limit specified as a positive integer for number of bytes.
-
-memswap:
-  description:
-    - Build container limit. Total memory (memory + swap). Specify as a positive integer for number of bytes or
-      -1 to disable swap.
-  default: null
-
 name:
   description:
-    - Image name or ID.
+    - Image name. Name format will be one of: name, repository/name, registry_server:port/name.
+      When pushing or pulling an image the name can optionally include the tag by appending ':tag_name'.
   required: true
 
 nocache:
@@ -87,72 +70,53 @@ nocache:
     - Do not use cache when building an image.
   deafult: false
 
-password:
-  description:
-    - Password used when connecting to the registry. Provide with username and email when credentials are not encoded
-      in docker configuration file or when encoded credentials should be updated.
-  default: null
-  nolog: true
-
 path:
   description:
-    - Path to Dockerfile and context from which to build an image.
+    - File path or URL to a context from which to build an image.
   default: null
 
 push:
   description:
-    - Use with state present to always push an image to the registry.
+    - Use with state present to always push an image to the registry. The image name must contain a repository 
+      path and optionally a registry. For example: registry.ansible.com/user_a/repository
   default: false
 
-registry:
+pull:
   description:
-    - URL of the registry. If not provided, defaults to Docker Hub.
+    - When building an image downloads any updates to the FROM image in Dockerfiles.
+  default: true
+
+repository:
+  description:
+    - Use with state tagged to set the repository for the tag.
   default: null
-  
+
 rm:
   description:
     - Remove intermediate containers after build.
   default: true
 
-tag:
-  description:
-    - Image tags. When pulling or pushing, set to 'all' to include all tags.
-  default: latest
-
-url:
-  description:
-    - The location of a Git repository. The repository acts as the context when building an image.
-    - Mutually exclusive with path.
-
-username:
-  description:
-    - Username used when connecting to the registry. Provide with password and email when credentials are not encoded 
-      in docker configuration file or when encoded credentials should be updated.
-  default: null
-  nolog: true
-
 state:
   description:
     - "absent" - if image exists, unconditionally remove it. Use the force option to un-tag and remove all images
       matching the provided name.
-    - "present" - check if image is present with the provided tag. If the image is not present or the force option
-      is used, the image will either be pulled from the registry, built or loaded from an archive. To build the image,
-      provide a path or url to the context and Dockerfile. To load an image, use load_path to provide a path to
-      an archive file. If no path, url or load_path is provided, the image will be pulled. Use the registry
-      parameters to control the registry from which the image is pulled.
-    
-required: false
+    - "present" - check if an image is present using the provided name and tag. If the image is not present or the 
+      force option is used, the image will either be pulled, built or loaded. To build the image, provide a path
+      to the context and Dockerfile. To load an image, use load_path to provide a path to an archive file. If no
+      path or load_path is provided, the image will be pulled.
+    - "tagged" - tag an image into a repository. Use the force option to replace an existing image.     
 default: present
 choices:
   - absent
   - present
-  
-http_timeout:
+  - tagged
+
+tag:
   description:
-    - Timeout for HTTP requests during the image build operation. Provide a positive integer value for the number of
-      seconds.
-  default: null
-  
+    - Used to select an image when pulling. Will be added to the image when pushing, tagging or building. Defaults to
+      'latest' when pulling an image. Required when tagging.
+  default: latest 
+
 ```
 
 
