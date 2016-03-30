@@ -1,3 +1,5 @@
+<!--- Follow this template to create a proposal. -->
+
 # Proposal: <proposal name>
 
 *Author*: Your Name <@yourGHid>
@@ -42,4 +44,4 @@ Does / should this require testing, and if so, how? Describe here. This section 
 Does / should this require documentation? If so, describe here. This section is optional but could be helpful.
 
 ## Anything else?
-If you'd like to add anything else beyond the above required and optional sections, you are welcome to do so. E
+If you'd like to add anything else beyond the above required and optional sections, you are welcome to do so.
