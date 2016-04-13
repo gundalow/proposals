@@ -107,7 +107,7 @@ content within the playbook:
 
 *Date*: 24/02/2016
 
-This is a combination of ideas taken from IRC, the ansible development group, and conversations at the recent contributor's summit. It also incorporates most of the ideas from Approach 1 (above) with two notable texceptions: 1) it elmintates maintaing a roles file (or what we think of today as requirements.yml); and 2) it does not include the definition of rolesdir in the playbook.
+This is a combination of ideas taken from IRC, the ansible development group, and conversations at the recent contributor's summit. It also incorporates most of the ideas from Approach 1 (above) with two notables exceptions: 1) it eliminates maintaining a roles file (or what we think of today as requirements.yml); and 2) it does not include the definition of rolesdir in the playbook.
 
 Here's the approach:
 
