@@ -10,6 +10,15 @@ _WIP: Currently collecting data_
 
 # Network Appliances
 
+* Arista EOS 
+* Cisco NXOS 
+* * Cisco IOS 
+* Cisco IOSXR 
+* Cumulus Linux 
+* Juniper JUNOS 
+* OpenSwitch
+
+
 ## A10
 
 ## Arista
@@ -50,6 +59,12 @@ There is an existing f5 internal Jenkins infrastructure that can have tests adde
 ### https://gns3.com
 
 Freenode: Waqas_ has a lab in GNS3 which includes Cisco IOS, IOS-XE, Cumulus and EOS
+
+# Reporting status
+Given that some (if not most) of the test networks will be on isolated networks we require a way to 
+
+ - Know what branches to test (unknown if we can keep continually running devel, would require a lot of resources)
+ - 
 
 ## Conclusion
 
